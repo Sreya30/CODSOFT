@@ -1,0 +1,134 @@
+import os
+import json
+
+# Global variable to store tasks
+tasks = []
+
+# Function to clear the screen
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Function to add a new task
+def add_task():
+    clear_screen()
+    print("Add a New Task")
+    task_name = input("Enter task name: ")
+    task_description = input("Enter task description: ")
+    task = {
+        'task_id': len(tasks) + 1,
+        'task_name': task_name,
+        'task_description': task_description,
+        'completed': False
+    }
+    tasks.append(task)
+    print("\nTask added successfully!")
+
+# Function to view all tasks
+def view_tasks():
+    clear_screen()
+    print("To-Do List")
+    print("----------")
+    if not tasks:
+        print("No tasks found.")
+    else:
+        for task in tasks:
+            status = "Completed" if task['completed'] else "Pending"
+            print(f"\nTask ID: {task['task_id']}")
+            print(f"Name: {task['task_name']}")
+            print(f"Description: {task['task_description']}")
+            print(f"Status: {status}")
+    input("\nPress Enter to continue...")
+
+# Function to mark a task as completed
+def complete_task():
+    clear_screen()
+    view_tasks()
+    try:
+        task_id = int(input("\nEnter the Task ID to mark as completed: "))
+        for task in tasks:
+            if task['task_id'] == task_id:
+                task['completed'] = True
+                print(f"\nTask '{task['task_name']}' marked as completed!")
+                break
+        else:
+            print("\nTask ID not found.")
+    except ValueError:
+        print("\nInvalid input! Task ID must be a number.")
+    input("\nPress Enter to continue...")
+
+# Function to update a task
+def update_task():
+    clear_screen()
+    view_tasks()
+    try:
+        task_id = int(input("\nEnter the Task ID to update: "))
+        for task in tasks:
+            if task['task_id'] == task_id:
+                print("\nCurrent Task Details:")
+                print(f"Name: {task['task_name']}")
+                print(f"Description: {task['task_description']}")
+                new_name = input("\nEnter updated name (leave blank to keep current): ").strip()
+                new_description = input("Enter updated description (leave blank to keep current): ").strip()
+                if new_name:
+                    task['task_name'] = new_name
+                if new_description:
+                    task['task_description'] = new_description
+                print("\nTask updated successfully!")
+                break
+        else:
+            print("\nTask ID not found.")
+    except ValueError:
+        print("\nInvalid input! Task ID must be a number.")
+    input("\nPress Enter to continue...")
+
+# Function to save tasks to a file
+def save_tasks():
+    with open('tasks.json', 'w') as file:
+        json.dump(tasks, file)
+
+# Function to load tasks from a file
+def load_tasks():
+    global tasks
+    try:
+        with open('tasks.json', 'r') as file:
+            tasks = json.load(file)
+    except FileNotFoundError:
+        tasks = []
+
+# Main program loop
+def main():
+    load_tasks()
+    while True:
+        clear_screen()
+        print("To-Do List Application")
+        print("----------------------")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task as Completed")
+        print("4. Update Task")
+        print("5. Save Tasks")
+        print("6. Exit")
+
+        choice = input("\nEnter your choice (1-6): ").strip()
+
+        if choice == '1':
+            add_task()
+        elif choice == '2':
+            view_tasks()
+        elif choice == '3':
+            complete_task()
+        elif choice == '4':
+            update_task()
+        elif choice == '5':
+            save_tasks()
+            print("\nTasks saved successfully!")
+            input("\nPress Enter to continue...")
+        elif choice == '6':
+            save_tasks()
+            print("\nExiting the program... Goodbye!")
+            break
+        else:
+            input("\nInvalid choice! Press Enter to try again...")
+
+if __name__ == "__main__":
+    main()
