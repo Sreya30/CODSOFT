@@ -1,14 +1,8 @@
 import os
 import json
-
-# Global variable to store tasks
 tasks = []
-
-# Function to clear the screen
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-# Function to add a new task
 def add_task():
     clear_screen()
     print("Add a New Task")
@@ -23,7 +17,6 @@ def add_task():
     tasks.append(task)
     print("\nTask added successfully!")
 
-# Function to view all tasks
 def view_tasks():
     clear_screen()
     print("To-Do List")
@@ -39,7 +32,6 @@ def view_tasks():
             print(f"Status: {status}")
     input("\nPress Enter to continue...")
 
-# Function to mark a task as completed
 def complete_task():
     clear_screen()
     view_tasks()
@@ -56,7 +48,6 @@ def complete_task():
         print("\nInvalid input! Task ID must be a number.")
     input("\nPress Enter to continue...")
 
-# Function to update a task
 def update_task():
     clear_screen()
     view_tasks()
@@ -81,12 +72,10 @@ def update_task():
         print("\nInvalid input! Task ID must be a number.")
     input("\nPress Enter to continue...")
 
-# Function to save tasks to a file
 def save_tasks():
     with open('tasks.json', 'w') as file:
         json.dump(tasks, file)
 
-# Function to load tasks from a file
 def load_tasks():
     global tasks
     try:
@@ -94,8 +83,6 @@ def load_tasks():
             tasks = json.load(file)
     except FileNotFoundError:
         tasks = []
-
-# Main program loop
 def main():
     load_tasks()
     while True:
